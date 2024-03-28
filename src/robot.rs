@@ -102,15 +102,15 @@ impl Master {
         //println!("These are loses {:?}", lose_moves);
         if win_moves.len() > 1 {
             if win_moves[0].len() <= lose_moves[0].len() {
-                println!("let me win");
+               // println!("let me win");
                 return win_moves[0][0]
                 
             } else if lose_moves.len() > 0{
-                println!("stop win");
+                //println!("stop win");
                 return lose_moves[0][1]
             }   
         } 
-        println!("lol");
+       // println!("lol");
         return self.moves[0][0];
     } 
         
