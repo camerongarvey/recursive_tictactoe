@@ -81,7 +81,7 @@ impl Board {
     }
 
     pub fn check_tie(&self) -> bool {
-        println!("It's a tie!");
+        //println!("It's a tie!");
         self.board.iter().all(|&symbol| symbol == 'x' || symbol == 'o')
      
     }
@@ -94,6 +94,20 @@ pub struct Board {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+    #[test]
+    fn print_board() {
+        let board=Board::new();
+        assert_eq!(vec!["1 2 3", "4 5 6", "7 8 9"], board.generate_print());
+    }
+    #[test]
+    fn check_legal() {
+        let mut board=Board::new();
+        board.board[1] = 'x';
+        assert!(board.cheack_legal_move('1'));
+        assert!(!board.cheack_legal_move('2'));
+    }
+
 }
 }
 
