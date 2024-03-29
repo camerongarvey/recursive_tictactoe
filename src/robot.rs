@@ -1,4 +1,6 @@
 pub mod robot {
+    use std::collections::HashMap;
+
 pub struct Iterator {
     pub board: [char; 9],
     pub robot_turn: char,
@@ -81,9 +83,7 @@ impl Master {
         let mut win_moves:Vec<Vec<char>> = Vec::new();
         let mut tie_moves: Vec<Vec<char>> = Vec::new();
         let mut lose_moves: Vec<Vec<char>> = Vec::new();
-        //println!("{:?}", self.moves);
         for possible_move in self.moves.clone() {
-           // println!("{:?}", possible_move);
             if possible_move.contains(&'w') {
                 win_moves.push(possible_move.clone());
                 
@@ -95,25 +95,35 @@ impl Master {
         } 
 
         win_moves.sort_by_key(|inner_vec| inner_vec.len());
-        tie_moves.sort_by_key(|inner_vec| inner_vec.len());
         lose_moves.sort_by_key(|inner_vec| inner_vec.len());
-        //println!("These are wins {:?}", win_moves);
-        //println!("These are ties {:?}", tie_moves);
-        //println!("These are loses {:?}", lose_moves);
-        if win_moves.len() > 1 {
-            if win_moves[0].len() <= lose_moves[0].len() {
-               // println!("let me win");
-                return win_moves[0][0]
-                
-            } else if lose_moves.len() > 0{
-                //println!("stop win");
-                return lose_moves[0][1]
-            }   
-        } 
-       // println!("lol");
-        return self.moves[0][0];
-    } 
         
+        if win_moves.len() > 0 && win_moves[0].len() == 2 {
+            return win_moves[0][0];
+        } else if lose_moves.len() > 0 && lose_moves[0].len() == 3 {
+            return lose_moves[0][1];
+            
+        } else if lose_moves.len() >= win_moves.len() {
+            if let Some((min_key, _)) = self.map_moves(&lose_moves).iter().min_by_key(|(_, &v)| v) {
+                    return *min_key;
+            } else {}
+         }  else if let Some((min_key, _)) = self.map_moves(&tie_moves).iter().max_by_key(|(_, &v)| v) {
+
+            return *min_key;
+         }
+
+    return self.moves[0][0];
+
+}
+
+
+    fn map_moves(&self, list:&Vec<Vec<char>>) -> HashMap<char, i32>{
+        let mut map = HashMap::new();
+        for item in list {
+            let count = map.entry(item[0]).or_insert(0);
+            *count += 1;
+        }
+        map
+    }       
 
     }
 }
