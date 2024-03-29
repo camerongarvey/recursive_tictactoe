@@ -6,7 +6,7 @@ impl Board {
         Board {board:['1','2','3','4','5','6','7','8','9'], turn: 'x'}
     }
 
-    fn make_move(&mut self, target:char, replacement: char) {
+    pub fn make_move(&mut self, target:char, replacement: char) {
         let mut temp_vec: Vec<char> = Vec::new();
         for x in self.board {
             if target == x {temp_vec.push(replacement);}
@@ -81,8 +81,12 @@ impl Board {
     }
 
     pub fn check_tie(&self) -> bool {
-        println!("It's a tie!");
-        self.board.iter().all(|&symbol| symbol == 'x' || symbol == 'o')
+        //println!("It's a tie!");
+        if self.board.iter().all(|&symbol| symbol == 'x' || symbol == 'o') {
+            println!("It's a Tie!");
+            return true
+        }
+        false
      
     }
 }   
@@ -94,6 +98,20 @@ pub struct Board {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+    #[test]
+    fn print_board() {
+        let board=Board::new();
+        assert_eq!(vec!["1 2 3", "4 5 6", "7 8 9"], board.generate_print());
+    }
+    #[test]
+    fn check_legal() {
+        let mut board=Board::new();
+        board.board[1] = 'x';
+        assert!(board.cheack_legal_move('1'));
+        assert!(!board.cheack_legal_move('2'));
+    }
+
 }
 }
 
